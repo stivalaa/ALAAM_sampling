@@ -1,0 +1,120 @@
+#!/usr/bin/Rscript
+#
+# File:    plotFNRwithCI.R
+# Author:  Alex Stivala
+# Created: September 2015
+#
+# $Id: plotFNRwithCI.R 648 2016-09-27 07:40:15Z stivalaa $
+#
+# Read multiple IPNet estimation error summary statistics results (generated
+# by plotIPNetResults.R) concatenated together from stdin and plot
+# false negative rate with confidence interval error bar.
+#
+# Usage: Rscript plotFNRwithCI.R  outfilename.eps
+#
+#
+# Output file is PostScript file outfilename.eps as specified on command line
+#
+# If filename contains 'landscape' then postscript arranged sideways
+# for slides not paper
+#
+#  
+# WARNING: output file is overwritten if it exists.
+#
+# Example: cat estimation_n500_bin_cont_*_error_statistics.txt | Rscript plotFNRwithCI.R  estimation_n500_bin_cont_fnr.eps
+# 
+
+library(ggplot2)
+library(grid)
+library(gridExtra)
+
+
+# read in R source file from directory where this script is located
+#http://stackoverflow.com/questions/1815606/rscript-determine-path-of-the-executing-script
+source_local <- function(fname){
+  argv <- commandArgs(trailingOnly = FALSE)
+  base_dir <- dirname(substring(argv[grep("--file=", argv)], 8))
+  source(paste(base_dir, fname, sep=.Platform$file.sep))
+}
+
+source_local('effectNames.R')
+
+
+
+args <- commandArgs(trailingOnly=TRUE)
+output_filename <- args[1]
+
+effects <- get_effects(output_filename)
+effect_names <- get_effect_names(output_filename)
+label_function <- get_label_function(output_filename)
+
+
+landscape <- FALSE
+if (length(grep("landscape", output_filename, fixed=TRUE)) > 0) {
+    landscape <- TRUE
+}
+
+
+D <- read.table(file("stdin"), header=TRUE, stringsAsFactors=FALSE)
+
+# FIXME dodgy use of output filename to get original network size
+if (length(grep('project90', output_filename)) > 0) {
+    D$numNodes <- (1-(D$percentRemoved/100)) * 4430 #  only works for N=4430
+} else if (length(grep('addhealth_', output_filename)) > 0) {
+    D$numNodes <- (1-(D$percentRemoved/100)) * 2539 #  only works for N=2539
+} else if (length(grep('n1000_', output_filename)) > 0) {
+    D$numNodes <- (1-(D$percentRemoved/100)) * 1000 #  only works for N=1000
+} else {
+    D$numNodes <- (1-(D$percentRemoved/100)) * 500 #  only works for N=500
+}
+
+plotlist <- list()
+for (i in 1:length(effects)) {
+    effect <- effects[i]
+    effect_name <- effect_names[i]
+    De <- D[which(D$Effect == effect),]
+
+    print(De)#xxx
+
+    if (length(De$Effect) == 0) {
+        cat("skipping effect ", effect, " not present in data\n")
+        # put an empty plot in list at position where this effect would
+        # be, to make position of effect plot in grid same, easier to compare
+        emptyplot <- ggplot(data.frame()) + geom_blank() +theme(panel.background=element_blank(), panel.grid.major=element_blank(), panel.grid.minor=element_blank(), plot.background=element_blank(),strip.background=element_blank(),axis.ticks=element_blank(), axis.title=element_blank(), axis.text=element_blank()) +xlim(0,1)+ylim(0,1) +annotate("text",label=paste("no", effect, "parameter",sep=' '), x=0.5,y=0.5,colour="grey")
+        plotlist <- c(plotlist, list(emptyplot))
+        next
+    }
+
+    p <- ggplot(De, aes(x = numNodes, y = FNRpercent))
+    p <- p + geom_point()
+    p <- p + geom_errorbar(aes(ymax = FNRpercentUpper,
+                               ymin = FNRpercentLower))
+    p <- p + theme_bw()
+    p <- p + theme(panel.background = element_blank(),
+                   ## panel.grid.major = element_blank(),
+                   ## panel.grid.minor = element_blank(),
+                   plot.background = element_blank(),
+                   strip.background = element_blank(),
+                   panel.border = element_rect(color = 'black')
+                   )
+    p <- p + scale_y_continuous(lim=c(0,100))
+    p <- p + ggtitle(effect_names[i])
+    p <- p + ylab('Type II error rate %')
+    p <- p + xlab('Number of nodes in sample')
+#    p <- p + theme(axis.ticks.x = element_blank())
+
+    plotlist <- c(plotlist, list(p))
+}
+
+if (landscape) {
+    postscript(output_filename, onefile=FALSE,
+               paper="special", horizontal=FALSE, width=9, height=6)
+    do.call(grid.arrange, c(plotlist, list(ncol=3)))
+} else {
+    postscript(output_filename, onefile=FALSE,
+                   paper="special", horizontal=FALSE, width=9, height=12)
+    do.call(grid.arrange, plotlist)    
+}
+
+dev.off()
+

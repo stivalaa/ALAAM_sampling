@@ -1,0 +1,24 @@
+#!/bin/bash
+
+#SBATCH --job-name="ipnet_estimations"
+#SBATCH --nodes=1
+#SBATCH --cpus-per-task=16
+#SBATCH --time=0-93:00:00
+
+module load parallel
+
+
+uname -a
+echo SLURM_CPUS_PER_TASK = $SLURM_CPUS_PER_TASK
+echo -n "started at: "; date
+
+echo -n "started at: "; date
+
+
+attrfiles=./sample-project90*_maxlinks@MAXLINKS_waves@WAVES_seeds@SEEDS.clu 
+sampleids=`echo $attrfiles |sed 's![.]/sample-project90_sim!!g;s!_maxlinks@MAXLINKS_waves@WAVES_seeds@SEEDS[.]clu!!g'`
+
+parallel -j $SLURM_CPUS_PER_TASK --progress --joblog parallel.log --xapply ${HOME}/alaam/scripts/run_estimation.sh ::: ${sampleids} ::: ${attrfiles}
+
+times
+echo -n "ended at: "; date
