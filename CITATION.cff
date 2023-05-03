@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Stivala"
+  given-names: "Alex"
+  orcid: "https://orcid.org/0000-0002-2442-4743"
+- family-names: "Gallagher"
+  given-names: "H. Colin"
+- family-names: "Rolls"
+  given-names: "David"
+- family-names: "Wang"
+  given-names: "Peng"
+- family-names: "Robins"
+  given-names: "Garry"
+title: "Using sampled network data with the Autologistic Actor Attribute Model"
+url: "https://github.com/stivalaa/ALAAM_sampling"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Stivala"
+      given-names: "Alex"
+      orcid: "https://orcid.org/0000-0002-2442-4743"
+    - family-names: "Gallagher"
+      given-names: "H. Colin"
+    - family-names: "Rolls"
+      given-names: "David"
+    - family-names: "Wang"
+      given-names: "Peng"
+    - family-names: "Robins"
+  given-names: "Garry"
+  title: "Using sampled network data with the Autologistic Actor Attribute Model"
+  doi: 10.48550/arXiv.2002.00849
+  url: https://arxiv.org/abs/2002.00849
+  year: 2020
