@@ -4,31 +4,25 @@ authors:
 - family-names: "Stivala"
   given-names: "Alex"
   orcid: "https://orcid.org/0000-0002-2442-4743"
-- family-names: "Gallagher"
-  given-names: "H. Colin"
-- family-names: "Rolls"
-  given-names: "David"
-- family-names: "Wang"
-  given-names: "Peng"
-- family-names: "Robins"
-  given-names: "Garry"
-title: "Using sampled network data with the Autologistic Actor Attribute Model"
-url: "https://github.com/stivalaa/ALAAM_sampling"
+- family-names: "Stuckey"
+  given-names: "Peter"
+- family-names: "Wirth"
+  given-names: "Tony"
+title: "Tableau-based protein substructure search using quadratic programming"
+url: https://github.com/stivalaa/qptabsearch
 preferred-citation:
   type: article
+  title: "Tableau-based protein substructure search using quadratic programming"
   authors:
     - family-names: "Stivala"
       given-names: "Alex"
       orcid: "https://orcid.org/0000-0002-2442-4743"
-    - family-names: "Gallagher"
-      given-names: "H. Colin"
-    - family-names: "Rolls"
-      given-names: "David"
-    - family-names: "Wang"
-      given-names: "Peng"
-    - family-names: "Robins"
-      given-names: "Garry"
-  title: "Using sampled network data with the Autologistic Actor Attribute Model"
-  doi: 10.48550/arXiv.2002.00849
-  url: https://arxiv.org/abs/2002.00849
-  year: 2020
+    - family-names: "Stuckey"
+      given-names: "Peter"
+    - family-names: "Wirth"
+      given-names: "Tony"
+  doi: 10.1186/1471-2105-10-153
+  journal: BMC Bioinformatics
+  year: 2009
+  volume: 10
+  start: 153
