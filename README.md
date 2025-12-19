@@ -7,6 +7,8 @@ Social science research increasingly benefits from statistical methods for under
 
 The scripts in this repository were imported from the alaam_scripts.tar.gz file availble from https://sites.google.com/site/alexdstivala/home/alaam_sampling.
 
+Also available from Zenodo with DOI: [![DOI](https://zenodo.org/badge/280021752.svg)](https://doi.org/10.5281/zenodo.17992431)
+
 
 ## References 
 
